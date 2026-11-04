@@ -3,29 +3,178 @@
     --color_fondo: #f8cccc;
     --text-color: #333;
     --font-family: 'Poppins', sans-serif;
+    --color-btn-primario: #4CAF50;
+    --color-btn-peligro: #f44336;
+    --color-btn-secundario: #ccc;
 }
 
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body{
-    font-family: 'Poppins', sans-serif;
+body {
+    font-family: var(--font-family);
     background-color: var(--color_fondo);
+    color: var(--text-color);
+    overflow: hidden;
+    touch-action: none;
 }
 
-#postIt{
+/* ==================================================
+        PIZARRA Y POST-ITS
+   ================================================== */
+
+#pizarra {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
+#postIt, .post-it {
     width: 180px;
     height: 160px;
     background-color: var(--color_postIt);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     padding: 20px;
-    margin: 20px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     position: absolute;
-}   
+    user-select: none;
+    word-wrap: break-word;
+    overflow: hidden;
+}
+
+.restituir-posicion {
+    transition: left 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* ==================================================
+        BOTÓN FLOTANTE (CREAR)
+   ================================================== */
+
+.fab {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background-color: var(--color-btn-primario);
+    color: white;
+    font-size: 32px;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.fab:active {
+    transform: scale(0.95);
+}
+
+/* ==================================================
+        MODALES (VENTANAS EMERGENTES)
+   ================================================== */
+
+.modal {
+    display: none; /* Oculto por defecto para modificar con style.display desde JS */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-contenido {
+    background-color: white;
+    width: 90%;
+    max-width: 400px;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.modal-contenido h2 {
+    font-size: 1.2rem;
+}
+
+.modal-contenido p {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+#input-texto {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-family: var(--font-family);
+    font-size: 1rem;
+    resize: none;
+}
+
+.selector-color {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95rem;
+}
+
+#input-color {
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    background: none;
+}
+
+/* ==================================================
+        BOTONES DE MODAL
+   ================================================== */
+
+.acciones-modal {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.acciones-modal button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    font-family: var(--font-family);
+    cursor: pointer;
+}
+
+#btn-guardar {
+    background-color: var(--color-btn-primario);
+    color: white;
+}
+
+#btn-confirmar-borrar {
+    background-color: var(--color-btn-peligro);
+    color: white;
+}
+
+#btn-cancelar-edicion, 
+#btn-cancelar-borrar {
+    background-color: var(--color-btn-secundario);
+    color: #333;
+}
