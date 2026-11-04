@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,9 +8,43 @@
 </head>
 <body>
 
-    <div id="postIt"></div>
+    <!-- Lienzo donde se colocarán todos los post-its -->
+    <div id="pizarra"></div>
 
-    
+    <!-- Botón flotante para CREAR notas -->
+    <button id="btn-crear" class="fab">+</button>
+
+    <!-- Modal para CREAR y ACTUALIZAR notas -->
+    <div id="modal-edicion" class="modal">
+        <div class="modal-contenido">
+            <h2 id="modal-titulo">Nueva Nota</h2>
+            
+            <textarea id="input-texto" placeholder="Escribe tu nota aquí..." rows="4"></textarea>
+            
+            <div class="selector-color">
+                <label for="input-color">Color de fondo:</label>
+                <input type="color" id="input-color" value="#fffa65">
+            </div>
+
+            <div class="acciones-modal">
+                <button id="btn-guardar">Guardar</button>
+                <button id="btn-cancelar-edicion">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de confirmación para BORRAR notas -->
+    <div id="modal-borrar" class="modal">
+        <div class="modal-contenido">
+            <h2>¿Eliminar esta nota?</h2>
+            <p>Esta acción es definitiva y se borrará de Firebase.</p>
+            
+            <div class="acciones-modal">
+                <button id="btn-confirmar-borrar">Sí, eliminar</button>
+                <button id="btn-cancelar-borrar">Cancelar</button>
+            </div>
+        </div>
+    </div>
 
     <script defer src="script.js"></script>
 </body>
