@@ -178,3 +178,7 @@ body {
     background-color: var(--color-btn-secundario);
     color: #333;
 }
+
+#btn-crear {
+    position: absolute;
+}
