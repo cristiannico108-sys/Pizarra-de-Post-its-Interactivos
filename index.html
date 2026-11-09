@@ -18,10 +18,35 @@
     <!-- Botón flotante para CREAR notas -->
     <button id="btn-crear" class="fab">+</button>
 
-    <!-- Modal para CREAR y ACTUALIZAR notas -->
+    <!-- Modal distinto exclusivo para CREAR (con paleta de botones) -->
+    <div id="modal-crear" class="modal">
+        <div class="modal-contenido">
+            <h2>Crear Nota</h2>
+
+            <textarea id="input-texto-crear" placeholder="¿Qué quieres anotar?" rows="4"></textarea>
+
+            <div class="selector-color-paleta">
+                <label>Selecciona un color:</label>
+                <div class="opciones-color">
+                    <button type="button" class="btn-color color-amarillo activo" data-color="#fffa65"></button>
+                    <button type="button" class="btn-color color-verde" data-color="#a8ffb2"></button>
+                    <button type="button" class="btn-color color-azul" data-color="#a8d8ff"></button>
+                    <button type="button" class="btn-color color-rosa" data-color="#ffbfd3"></button>
+                    <button type="button" class="btn-color color-naranja" data-color="#ffd1a8"></button>
+                </div>
+            </div>
+
+            <div class="acciones-modal">
+                <button id="btn-guardar-crear">Crear Nota</button>
+                <button id="btn-cancelar-crear">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para ACTUALIZAR / EDITAR notas (Doble toque) -->
     <div id="modal-edicion" class="modal">
         <div class="modal-contenido">
-            <h2 id="modal-titulo">Nueva Nota</h2>
+            <h2 id="modal-titulo">Editar Nota</h2>
 
             <textarea id="input-texto" placeholder="Escribe tu nota aquí..." rows="4"></textarea>
 
@@ -31,7 +56,7 @@
             </div>
 
             <div class="acciones-modal">
-                <button id="btn-guardar">Guardar</button>
+                <button id="btn-guardar">Guardar Cambios</button>
                 <button id="btn-cancelar-edicion">Cancelar</button>
             </div>
         </div>
