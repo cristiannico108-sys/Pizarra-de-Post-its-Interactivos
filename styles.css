@@ -32,6 +32,28 @@ body {
     height: 100vh;
 }
 
+#pizarra h1 {
+    position: absolute;
+    top: 28px;
+    left: 32px;
+    color: #633d4b;
+    font-size: clamp(1.7rem, 4vw, 2.6rem);
+    font-weight: 700;
+    letter-spacing: -0.04em;
+    line-height: 1.15;
+    text-shadow: 0 2px 0 rgba(255, 255, 255, 0.45);
+}
+
+#pizarra h1::after {
+    content: "";
+    display: block;
+    width: 58%;
+    height: 5px;
+    margin-top: 8px;
+    border-radius: 999px;
+    background: var(--color-btn-primario);
+}
+
 #postIt, .post-it {
     width: 180px;
     height: 160px;
