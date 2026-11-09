@@ -1,3 +1,6 @@
+import { addDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { notasRef } from "./firebase_config.js";
+
 /*==================================================
                 VARIABLES GLOBALES
   ================================================== */
@@ -10,7 +13,6 @@ var pizarra = document.getElementById("pizarra");
 /*==================================================
                 MENÚ
   ================================================== */
-
 
 /*=============================
         AL CLICKAR EN "+"
@@ -25,8 +27,6 @@ btnCrear.addEventListener("click", function() {
     modalEdicion.style.display = "flex";
 });
 
-
-
 /*===================================
       Al pulsar en "Cancelar"
 =====================================
@@ -34,8 +34,6 @@ btnCrear.addEventListener("click", function() {
 btnCancelarEdicion.addEventListener("click", function() {
     modalEdicion.style.display = "none";
 });
-
-
 
 /*====================================================================
             MOVIMIENTO DEL BOTÓN CREAR (+)
@@ -61,8 +59,6 @@ btnCrear.addEventListener("touchmove", (e) => {
     btnCrear.style.left = `${toque.clientX - offsetX}px`;
 });
 
-
-
 /*====================================================================
                 MOVIMIENTO DE LOS POST-ITS
   ==================================================================== */
@@ -85,11 +81,16 @@ function hacerArrastrable(elem) {
     });
 }
 
+// Activar movimiento en la nota de prueba del HTML si existe
+var postItInicial = document.getElementById("postIt");
+if (postItInicial) {
+    hacerArrastrable(postItInicial);
+}
 
 /*====================================================================
-            CREACIÓN VISUAL DEL POST-IT
+            CREACIÓN VISUAL Y SUBIDA AL FIRESTORE
   ==================================================================== */
-btnGuardar.addEventListener("click", function() {
+btnGuardar.addEventListener("click", async function() {
     let texto = document.getElementById("input-texto").value;
     let color = document.getElementById("input-color").value;
 
@@ -98,21 +99,38 @@ btnGuardar.addEventListener("click", function() {
         return;
     }
 
-    var nuevaNota = document.createElement("div");
-    nuevaNota.className = "post-it";
-    nuevaNota.style.backgroundColor = color;
-    
-    nuevaNota.style.left = "50px"; 
-    nuevaNota.style.top = "100px";
+    let posX = 50;
+    let posY = 100;
 
-    var parrafo = document.createElement("p");
-    parrafo.innerText = texto;
+    try {
+        // 1. Guardar en Firestore
+        await addDoc(notasRef, {
+            texto: texto,
+            color: color,
+            coordenadaX: posX,
+            coordenadaY: posY
+        });
 
-    nuevaNota.appendChild(parrafo);
-    pizarra.appendChild(nuevaNota);
+        // 2. Crear la nota visualmente en la pantalla
+        var nuevaNota = document.createElement("div");
+        nuevaNota.className = "post-it";
+        nuevaNota.style.backgroundColor = color;
+        
+        nuevaNota.style.left = `${posX}px`; 
+        nuevaNota.style.top = `${posY}px`;
 
-    // Activamos la función de arrastrar en la nueva nota recién creada
-    hacerArrastrable(nuevaNota);
+        var parrafo = document.createElement("p");
+        parrafo.innerText = texto;
 
-    modalEdicion.style.display = "none";
+        nuevaNota.appendChild(parrafo);
+        pizarra.appendChild(nuevaNota);
+
+        // Activamos la función de arrastrar en la nueva nota recién creada
+        hacerArrastrable(nuevaNota);
+
+        modalEdicion.style.display = "none";
+
+    } catch (error) {
+        console.error("Error al guardar en Firestore:", error);
+    }
 });

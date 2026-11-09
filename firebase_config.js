@@ -1,13 +1,10 @@
 /*==================================================
         VINCULAR CON FIRESTORE
-  ==================================================
-*/
+  ================================================== */
 
-// 1. IMPORTACIONES DESDE LOS SERVIDORES DE GOOGLE (CDN)
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, collection } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-// 2. LA CONFIGURACIÓN EXACTA DE TU APP
 const firebaseConfig = {
   apiKey: "AIzaSyDGzWyFn7PPvn8xrzSZk7fdv2tFdQWsRhQ",
   authDomain: "fullstack-45eb3.firebaseapp.com",
@@ -18,9 +15,8 @@ const firebaseConfig = {
   measurementId: "G-1PK4TR1FXG"
 };
 
-// 3. INICIALIZAR FIREBASE Y LA BASE DE DATOS
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const notasRef = collection(db, "Post-It");
+export const db = getFirestore(app);
+export const notasRef = collection(db, "Post-It");
 
 console.log("Firebase configurado correctamente");
