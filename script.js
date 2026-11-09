@@ -23,35 +23,25 @@ var btnCancelarBorrar = document.getElementById("btn-cancelar-borrar");
 
 var pizarra = document.getElementById("pizarra");
 
-// Variables para el flujo de borrado y selección de color
+// Variables de estado
 var notaABorrar = null;
 var posInicialLeft = 0;
 var posInicialTop = 0;
-var colorSeleccionado = "#fffa65"; // Color por defecto (amarillo)
 
 /*==================================================
-                MENÚ CREAR / PALETA DE COLORES
+                MENÚ CREAR
   ================================================== */
 
 // Abrir el modal de creación al pulsar "+"
 btnCrear.addEventListener("click", function() {
     document.getElementById("input-texto-crear").value = "";
+    document.getElementById("input-color-crear").value = "#fffa65";
     modalCrear.style.display = "flex";
 });
 
 // Cerrar modal de creación
 btnCancelarCrear.addEventListener("click", function() {
     modalCrear.style.display = "none";
-});
-
-// Selección de color mediante la paleta de botones
-var botonesColor = document.querySelectorAll(".btn-color");
-botonesColor.forEach(function(boton) {
-    boton.addEventListener("click", function() {
-        botonesColor.forEach(b => b.classList.remove("activo"));
-        this.classList.add("activo");
-        colorSeleccionado = this.dataset.color;
-    });
 });
 
 // Cerrar modal de edición
@@ -95,7 +85,6 @@ function hacerArrastrable(elem) {
         offsetX = e.touches[0].clientX - rect.left;
         offsetY = e.touches[0].clientY - rect.top;
 
-        // Guardamos posición y tiempo inicial para detectar swipe y para restituir
         startX = e.touches[0].clientX;
         startY = e.touches[0].clientY;
         startTime = Date.now();
@@ -117,7 +106,6 @@ function hacerArrastrable(elem) {
         let deltaY = toque.clientY - startY;
         let deltaTime = Date.now() - startTime;
 
-        // Swipe horizontal rápido (más de 90px en menos de 400ms)
         let esSwipeHorizontal = Math.abs(deltaX) > 90 && Math.abs(deltaY) < 60 && deltaTime < 400;
 
         if (esSwipeHorizontal) {
@@ -131,7 +119,7 @@ function hacerArrastrable(elem) {
 }
 
 /*====================================================================
-            FLUJO DE CONFIRMACIÓN DE BORRADO (MODAL)
+            FLUJO DE CONFIRMACIÓN DE BORRADO
   ==================================================================== */
 btnConfirmarBorrar.addEventListener("click", async function() {
     if (notaABorrar) {
@@ -174,6 +162,7 @@ if (postItInicial) {
 
 btnGuardarCrear.addEventListener("click", async function() {
     let texto = document.getElementById("input-texto-crear").value;
+    let colorSeleccionado = document.getElementById("input-color-crear").value;
 
     if (texto.trim() === "") {
         alert("Escribe algo antes de guardar.");
@@ -192,7 +181,7 @@ btnGuardarCrear.addEventListener("click", async function() {
             coordenadaY: posY
         });
 
-        // 2. Crear el post-it en la pantalla
+        // 2. Crear la nota visualmente en la pantalla
         var nuevaNota = document.createElement("div");
         nuevaNota.className = "post-it";
         nuevaNota.style.backgroundColor = colorSeleccionado;

@@ -18,32 +18,26 @@
     <!-- Botón flotante para CREAR notas -->
     <button id="btn-crear" class="fab">+</button>
 
-    <!-- Modal distinto exclusivo para CREAR (con paleta de botones) -->
+    <!-- Modal exclusivo para CREAR -->
     <div id="modal-crear" class="modal">
         <div class="modal-contenido">
-            <h2>Crear Nota</h2>
+            <h2>Crear Post-it</h2>
 
             <textarea id="input-texto-crear" placeholder="¿Qué quieres anotar?" rows="4"></textarea>
 
-            <div class="selector-color-paleta">
-                <label>Selecciona un color:</label>
-                <div class="opciones-color">
-                    <button type="button" class="btn-color color-amarillo activo" data-color="#fffa65"></button>
-                    <button type="button" class="btn-color color-verde" data-color="#a8ffb2"></button>
-                    <button type="button" class="btn-color color-azul" data-color="#a8d8ff"></button>
-                    <button type="button" class="btn-color color-rosa" data-color="#ffbfd3"></button>
-                    <button type="button" class="btn-color color-naranja" data-color="#ffd1a8"></button>
-                </div>
+            <div class="selector-color">
+                <label for="input-color-crear">Color de fondo:</label>
+                <input type="color" id="input-color-crear" value="#fffa65">
             </div>
 
             <div class="acciones-modal">
-                <button id="btn-guardar-crear">Crear Nota</button>
+                <button id="btn-guardar-crear">Guardar Nota</button>
                 <button id="btn-cancelar-crear">Cancelar</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal para ACTUALIZAR / EDITAR notas (Doble toque) -->
+    <!-- Modal para ACTUALIZAR / EDITAR notas -->
     <div id="modal-edicion" class="modal">
         <div class="modal-contenido">
             <h2 id="modal-titulo">Editar Nota</h2>
