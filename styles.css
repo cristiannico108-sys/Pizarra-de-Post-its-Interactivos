@@ -218,3 +218,49 @@ body {
     background-color: var(--color-btn-secundario);
     color: #333;
 }
+
+/* ==================================================
+        LOGIN CON GOOGLE Y LOGOUT
+   ================================================== */
+
+.btn-google {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px;
+    background-color: #ffffff;
+    color: #333333;
+    border: 1px solid #dadce0;
+    border-radius: 6px;
+    font-family: var(--font-family);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    transition: background-color 0.2s ease;
+}
+
+.btn-google:hover {
+    background-color: #f8f9fa;
+}
+
+.error-login {
+    color: var(--color-btn-peligro);
+    font-size: 0.85rem;
+}
+
+#btn-logout {
+    position: absolute;
+    top: 28px;
+    right: 32px;
+    padding: 10px 16px;
+    background-color: rgba(30, 20, 15, 0.75);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-family: var(--font-family);
+    cursor: pointer;
+    z-index: 100;
+}
