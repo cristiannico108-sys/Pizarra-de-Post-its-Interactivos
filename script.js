@@ -1,10 +1,18 @@
 import { addDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-import { db, notasRef } from "./firebase_config.js";
+import { signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { db, notasRef, auth, provider } from "./firebase_config.js";
 
 /*==================================================
                 VARIABLES GLOBALES
   ================================================== */
 var btnCrear = document.getElementById("btn-crear");
+var pizarra = document.getElementById("pizarra");
+
+// Modal de LOGIN / LOGOUT
+var modalLogin = document.getElementById("modal-login");
+var btnGoogleLogin = document.getElementById("btn-google-login");
+var btnLogout = document.getElementById("btn-logout");
+var mensajeErrorLogin = document.getElementById("mensaje-error-login");
 
 // Modal exclusivo para CREAR
 var modalCrear = document.getElementById("modal-crear");
@@ -21,15 +29,51 @@ var modalBorrar = document.getElementById("modal-borrar");
 var btnConfirmarBorrar = document.getElementById("btn-confirmar-borrar");
 var btnCancelarBorrar = document.getElementById("btn-cancelar-borrar");
 
-var pizarra = document.getElementById("pizarra");
-
 // Variables de estado
 var notaABorrar = null;
 var posInicialLeft = 0;
 var posInicialTop = 0;
 
 /*==================================================
-                MENÚ CREAR
+                AUTENTICACIÓN CON GOOGLE
+  ================================================== */
+
+// Iniciar sesión al pulsar el botón de Google
+btnGoogleLogin.addEventListener("click", async function() {
+    mensajeErrorLogin.innerText = "";
+    try {
+        await signInWithPopup(auth, provider);
+    } catch (error) {
+        console.error("Error al iniciar sesión con Google:", error);
+        mensajeErrorLogin.innerText = "No se pudo iniciar sesión. Inténtalo de nuevo.";
+    }
+});
+
+// Cerrar sesión
+btnLogout.addEventListener("click", async function() {
+    try {
+        await signOut(auth);
+    } catch (error) {
+        console.error("Error al cerrar sesión:", error);
+    }
+});
+
+// Escuchar cambios en el estado de la sesión (conectado / desconectado)
+onAuthStateChanged(auth, function(usuario) {
+    if (usuario) {
+        // Usuario logueado: ocultamos el modal y mostramos el botón de salir
+        modalLogin.style.display = "none";
+        btnLogout.style.display = "block";
+        console.log("Sesión iniciada como:", usuario.displayName);
+    } else {
+        // Sin sesión: bloqueamos la pantalla con el modal de login
+        modalLogin.style.display = "flex";
+        btnLogout.style.display = "none";
+    }
+});
+
+/*==================================================
+                MENÚ CREAR / EDITAR
   ================================================== */
 
 // Abrir el modal de creación al pulsar "+"
@@ -173,12 +217,13 @@ btnGuardarCrear.addEventListener("click", async function() {
     let posY = 100;
 
     try {
-        // 1. Guardar en Firestore
+        // 1. Guardar en Firestore vinculando el ID del usuario
         let docRef = await addDoc(notasRef, {
             texto: texto,
             color: colorSeleccionado,
             coordenadaX: posX,
-            coordenadaY: posY
+            coordenadaY: posY,
+            uid: auth.currentUser ? auth.currentUser.uid : null
         });
 
         // 2. Crear la nota visualmente en la pantalla
