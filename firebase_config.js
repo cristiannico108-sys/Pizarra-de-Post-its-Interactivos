@@ -23,4 +23,3 @@ export const notasRef = collection(db, "Post-It");
 export const auth = getAuth(app);
 export const provider = new GoogleAuthProvider();
 
-console.log("Firebase configurado correctamente");
