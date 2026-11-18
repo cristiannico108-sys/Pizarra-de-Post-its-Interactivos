@@ -1,9 +1,9 @@
 /*==================================================
-        VINCULAR CON FIRESTORE
+        VINCULAR CON FIRESTORE Y AUTH
   ================================================== */
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, collection } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { getAuth, GoogleAuthProvider } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDGzWyFn7PPvn8xrzSZk7fdv2tFdQWsRhQ",
@@ -18,5 +18,9 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
 export const notasRef = collection(db, "Post-It");
+
+// Inicializar autenticación con Google
+export const auth = getAuth(app);
+export const provider = new GoogleAuthProvider();
 
 console.log("Firebase configurado correctamente");
