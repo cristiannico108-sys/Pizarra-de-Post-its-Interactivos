@@ -163,7 +163,7 @@ function hacerArrastrable(elem) {
 }
 
 /*====================================================================
-            FLUJO DE CONFIRMACIÓN DE BORRADO
+                    CONFIRMACIÓN DE BORRADO
   ==================================================================== */
 btnConfirmarBorrar.addEventListener("click", async function() {
     if (notaABorrar) {
