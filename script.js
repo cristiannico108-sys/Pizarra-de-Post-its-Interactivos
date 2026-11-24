@@ -1,4 +1,4 @@
-import { addDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { addDoc, deleteDoc, doc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 import { signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { db, notasRef, auth, provider } from "./firebase_config.js";
 
@@ -35,10 +35,56 @@ var posInicialLeft = 0;
 var posInicialTop = 0;
 
 /*==================================================
+        FUNCIONES PARA PINTAR Y LIMPIAR PIZARRA
+  ================================================== */
+function limpiarPizarra() {
+    var notasEnPantalla = document.querySelectorAll(".post-it");
+    notasEnPantalla.forEach(function(nota) {
+        nota.remove();
+    });
+}
+
+function dibujarPostIt(id, texto, color, posX, posY) {
+    var nuevaNota = document.createElement("div");
+    nuevaNota.className = "post-it";
+    nuevaNota.style.backgroundColor = color;
+    nuevaNota.style.left = `${posX}px`;
+    nuevaNota.style.top = `${posY}px`;
+    nuevaNota.dataset.id = id;
+
+    var parrafo = document.createElement("p");
+    parrafo.innerText = texto;
+
+    nuevaNota.appendChild(parrafo);
+    pizarra.appendChild(nuevaNota);
+
+    hacerArrastrable(nuevaNota);
+}
+
+async function cargarNotasUsuario(uid) {
+    limpiarPizarra();
+    try {
+        var consulta = query(notasRef, where("uid", "==", uid));
+        var snapshot = await getDocs(consulta);
+
+        snapshot.forEach(function(documento) {
+            var datos = documento.data();
+            dibujarPostIt(
+                documento.id,
+                datos.texto,
+                datos.color,
+                datos.coordenadaX,
+                datos.coordenadaY
+            );
+        });
+    } catch (error) {
+        console.error("Error al cargar las notas del usuario:", error);
+    }
+}
+
+/*==================================================
                 AUTENTICACIÓN CON GOOGLE
   ================================================== */
-
-// Iniciar sesión al pulsar el botón de Google
 btnGoogleLogin.addEventListener("click", async function() {
     mensajeErrorLogin.innerText = "";
     try {
@@ -49,7 +95,6 @@ btnGoogleLogin.addEventListener("click", async function() {
     }
 });
 
-// Cerrar sesión
 btnLogout.addEventListener("click", async function() {
     try {
         await signOut(auth);
@@ -58,15 +103,17 @@ btnLogout.addEventListener("click", async function() {
     }
 });
 
-// Escuchar cambios en el estado de la sesión (conectado / desconectado)
-onAuthStateChanged(auth, function(usuario) {
+onAuthStateChanged(auth, async function(usuario) {
     if (usuario) {
-        // Usuario logueado: ocultamos el modal y mostramos el botón de salir
         modalLogin.style.display = "none";
         btnLogout.style.display = "block";
         console.log("Sesión iniciada como:", usuario.displayName);
+
+        // Cargamos solo los post-its de esta cuenta
+        await cargarNotasUsuario(usuario.uid);
     } else {
-        // Sin sesión: bloqueamos la pantalla con el modal de login
+        // Vaciamos la pizarra al cerrar sesión
+        limpiarPizarra();
         modalLogin.style.display = "flex";
         btnLogout.style.display = "none";
     }
@@ -75,20 +122,16 @@ onAuthStateChanged(auth, function(usuario) {
 /*==================================================
                 MENÚ CREAR / EDITAR
   ================================================== */
-
-// Abrir el modal de creación al pulsar "+"
 btnCrear.addEventListener("click", function() {
     document.getElementById("input-texto-crear").value = "";
     document.getElementById("input-color-crear").value = "#fffa65";
     modalCrear.style.display = "flex";
 });
 
-// Cerrar modal de creación
 btnCancelarCrear.addEventListener("click", function() {
     modalCrear.style.display = "none";
 });
 
-// Cerrar modal de edición
 btnCancelarEdicion.addEventListener("click", function() {
     modalEdicion.style.display = "none";
 });
@@ -199,11 +242,6 @@ btnCancelarBorrar.addEventListener("click", function() {
 /*====================================================================
             CREACIÓN VISUAL Y SUBIDA AL FIRESTORE
   ==================================================================== */
-var postItInicial = document.getElementById("postIt");
-if (postItInicial) {
-    hacerArrastrable(postItInicial);
-}
-
 btnGuardarCrear.addEventListener("click", async function() {
     let texto = document.getElementById("input-texto-crear").value;
     let colorSeleccionado = document.getElementById("input-color-crear").value;
@@ -217,7 +255,6 @@ btnGuardarCrear.addEventListener("click", async function() {
     let posY = 100;
 
     try {
-        // 1. Guardar en Firestore vinculando el ID del usuario
         let docRef = await addDoc(notasRef, {
             texto: texto,
             color: colorSeleccionado,
@@ -226,23 +263,7 @@ btnGuardarCrear.addEventListener("click", async function() {
             uid: auth.currentUser ? auth.currentUser.uid : null
         });
 
-        // 2. Crear la nota visualmente en la pantalla
-        var nuevaNota = document.createElement("div");
-        nuevaNota.className = "post-it";
-        nuevaNota.style.backgroundColor = colorSeleccionado;
-        nuevaNota.style.left = `${posX}px`;
-        nuevaNota.style.top = `${posY}px`;
-
-        nuevaNota.dataset.id = docRef.id;
-
-        var parrafo = document.createElement("p");
-        parrafo.innerText = texto;
-
-        nuevaNota.appendChild(parrafo);
-        pizarra.appendChild(nuevaNota);
-
-        hacerArrastrable(nuevaNota);
-
+        dibujarPostIt(docRef.id, texto, colorSeleccionado, posX, posY);
         modalCrear.style.display = "none";
 
     } catch (error) {
