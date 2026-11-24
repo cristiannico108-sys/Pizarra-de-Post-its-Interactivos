@@ -38,7 +38,7 @@ var posInicialTop = 0;
         FUNCIONES PARA PINTAR Y LIMPIAR PIZARRA
   ================================================== */
 function limpiarPizarra() {
-    var notasEnPantalla = document.querySelectorAll(".post-it");
+    var notasEnPantalla = document.querySelectorAll("#postIt, .post-it");
     notasEnPantalla.forEach(function(nota) {
         nota.remove();
     });
@@ -66,6 +66,9 @@ async function cargarNotasUsuario(uid) {
     try {
         var consulta = query(notasRef, where("uid", "==", uid));
         var snapshot = await getDocs(consulta);
+
+        // Limpiamos justo antes de dibujar para evitar duplicados
+        limpiarPizarra();
 
         snapshot.forEach(function(documento) {
             var datos = documento.data();
@@ -96,6 +99,7 @@ btnGoogleLogin.addEventListener("click", async function() {
 });
 
 btnLogout.addEventListener("click", async function() {
+    limpiarPizarra();
     try {
         await signOut(auth);
     } catch (error) {
@@ -107,15 +111,14 @@ onAuthStateChanged(auth, async function(usuario) {
     if (usuario) {
         modalLogin.style.display = "none";
         btnLogout.style.display = "block";
-        console.log("Sesión iniciada como:", usuario.displayName);
+        console.log("Cuenta activa:", usuario.email, "| UID:", usuario.uid);
 
-        // Cargamos solo los post-its de esta cuenta
         await cargarNotasUsuario(usuario.uid);
     } else {
-        // Vaciamos la pizarra al cerrar sesión
         limpiarPizarra();
         modalLogin.style.display = "flex";
         btnLogout.style.display = "none";
+        console.log("Sesión cerrada");
     }
 });
 
