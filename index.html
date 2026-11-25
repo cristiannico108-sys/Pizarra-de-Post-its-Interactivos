@@ -11,11 +11,21 @@
 
 <body>
 
-    <!-- Modal para INICIAR SESIÓN CON GOOGLE -->
+    <!-- Modal para INICIAR SESIÓN / REGISTRO -->
     <div id="modal-login" class="modal" style="display: flex;">
         <div class="modal-contenido" style="text-align: center;">
             <h2>Bienvenido a tu Pizarra</h2>
-            <p>Inicia sesión con tu cuenta para acceder a tus post-its.</p>
+            <p>Inicia sesión o crea una cuenta para guardar tus post-its.</p>
+
+            <input type="email" id="input-email" placeholder="Correo electrónico" required>
+            <input type="password" id="input-password" placeholder="Contraseña (mín. 6 caracteres)" required>
+
+            <div class="botones-email">
+                <button type="button" id="btn-login-email">Iniciar Sesión</button>
+                <button type="button" id="btn-registro-email">Registrarse</button>
+            </div>
+
+            <div class="separador-login"><span>o</span></div>
 
             <button type="button" id="btn-google-login" class="btn-google">
                 <svg width="20" height="20" viewBox="0 0 24 24">

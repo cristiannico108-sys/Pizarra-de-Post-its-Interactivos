@@ -264,3 +264,62 @@ body {
     cursor: pointer;
     z-index: 100;
 }
+
+/* ==================================================
+        FORMULARIO DE CORREO Y CONTRASEÑA
+   ================================================== */
+
+#input-email,
+#input-password {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-family: var(--font-family);
+    font-size: 0.95rem;
+}
+
+.botones-email {
+    display: flex;
+    gap: 10px;
+}
+
+.botones-email button {
+    flex: 1;
+    padding: 11px;
+    border: none;
+    border-radius: 6px;
+    font-family: var(--font-family);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+#btn-login-email {
+    background-color: var(--color-btn-primario);
+    color: white;
+}
+
+#btn-registro-email {
+    background-color: var(--color-btn-crear);
+    color: white;
+}
+
+.separador-login {
+    display: flex;
+    align-items: center;
+    color: #888;
+    font-size: 0.85rem;
+}
+
+.separador-login::before,
+.separador-login::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background-color: #ddd;
+}
+
+.separador-login span {
+    padding: 0 10px;
+}
