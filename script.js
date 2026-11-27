@@ -73,7 +73,7 @@ async function cargarNotasUsuario(uid) {
         var consulta = query(notasRef, where("uid", "==", uid));
 
         // 3. Ejecuto la consulta y pauso la función (await) hasta recibir los resultados (snapshot)
-        var snapshot = await getDocs(consulta);
+        var snapshot = await getDocs(consulta); // ejecuta consulta en base de datos y descarga documentos que cumplen las condiciones en ese momento
 
         // 4. Limpio para evitar notas duplicadas si el evento de autenticación se disparara dos veces seguidas
         limpiarPizarra();
